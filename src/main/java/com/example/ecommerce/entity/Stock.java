@@ -29,6 +29,6 @@ public class Stock {
     private Date modifyDate;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "merchant_id", referencedColumnName = "id")
+    @JoinColumn(name = "merchant_id", referencedColumnName = "merchantId")
     private Merchant merchant;
 }
