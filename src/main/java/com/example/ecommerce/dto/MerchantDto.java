@@ -2,7 +2,6 @@ package com.example.ecommerce.dto;
 
 import lombok.Data;
 import lombok.ToString;
-
 import java.util.Date;
 
 @Data
@@ -12,7 +11,6 @@ public class MerchantDto {
     private Integer id;
     private String merchantId;
     private String name;
-    private String username;
     private String password;
     private String confirmPassword;
     private String email;

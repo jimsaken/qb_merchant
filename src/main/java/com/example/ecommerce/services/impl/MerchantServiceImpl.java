@@ -3,7 +3,6 @@ package com.example.ecommerce.services.impl;
 import com.example.ecommerce.dto.MerchantDto;
 import com.example.ecommerce.dto.SignInDto;
 import com.example.ecommerce.entity.Merchant;
-import com.example.ecommerce.exceptions.CustomException;
 import com.example.ecommerce.repository.MerchantRepository;
 import com.example.ecommerce.services.MerchantService;
 import org.springframework.beans.BeanUtils;
@@ -26,7 +25,7 @@ public class MerchantServiceImpl implements MerchantService {
 
     @Override
     public String signUp(MerchantDto merchantDto) {
-        if (Objects.nonNull(merchantRepository.findByUsername(merchantDto.getUsername()))) {
+        if (Objects.nonNull(merchantRepository.findByEmail(merchantDto.getEmail()))) {
             return "username already exists";
         }
 
@@ -40,8 +39,6 @@ public class MerchantServiceImpl implements MerchantService {
             e.printStackTrace();
         }
 
-//        Merchant merchant = new Merchant(merchantDto.getId(), merchantDto.getName(), merchantDto.getUsername(), merchantDto.getPassword(),
-//                merchantDto.getEmail(), merchantDto.getAddress(), merchantDto.getPhoneNumber());
         Merchant merchant = new Merchant();
         BeanUtils.copyProperties(merchantDto, merchant);
         merchant.setMerchantId(merchant.getName().toUpperCase().substring(0, 3) + (new SimpleDateFormat("yyyy-MM").format(new Date())));
@@ -60,40 +57,49 @@ public class MerchantServiceImpl implements MerchantService {
     }
 
     @Override
-    public String signIn(SignInDto signInDto) {
-        Merchant merchant = merchantRepository.findByUsername(signInDto.getUsername());
+    public Integer signIn(SignInDto signInDto) {
+        Merchant merchant = merchantRepository.findByEmail(signInDto.getEmail());
 
-        if(Objects.isNull(merchantRepository.findByUsername(signInDto.getUsername()))) {
-            return "username does not exist";
+        if(Objects.isNull(merchantRepository.findByEmail(signInDto.getEmail()))) {
+            return 2;
         }
 
         try {
             if (!merchant.getPassword().equals(hashPassword(signInDto.getPassword())))
-                return "wrong password";
+                return 3;
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
 
-        return "success";
+        return 1;
     }
 
     @Override
     public List<Merchant> findAll() {
-        List<Merchant> merchantList = merchantRepository.findAll();
-        return merchantList;
+        return merchantRepository.findAll();
     }
 
     @Override
-    public String deleteById(String id) {
+    public Boolean deleteById(String id) {
         if(!merchantRepository.existsById(id))
-            return "user does not exist";
+            return false;
         merchantRepository.deleteById(id);
-        return "user deleted";
+        return true;
     }
 
     @Override
-    public Optional<Merchant> findById(String merchantId) {
-        return merchantRepository.findById(merchantId);
+    public Merchant findById(String merchantId) {
+
+        Optional<Merchant> optionalMerchant = merchantRepository.findById(merchantId);
+        if(optionalMerchant.isPresent()){
+            return optionalMerchant.get();
+        }
+        return null;
+    }
+
+    @Override
+    public Merchant findByEmail(String email) {
+        return merchantRepository.findByEmail(email);
     }
 
     @Override

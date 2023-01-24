@@ -20,9 +20,9 @@ public class Merchant implements Serializable {
     @Column(unique = true)
     private String merchantId;
     private String name;
-    private String username;
     private String password;
 //    private String confirmPassword;
+    @Column(unique = true)
     private String email;
     private String address;
     private String phoneNumber;

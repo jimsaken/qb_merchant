@@ -26,8 +26,10 @@ public class StockController {
 
     @Autowired
     MerchantService merchantService;
+
     @Autowired
     StockService stockService;
+
     @Autowired
     FeignServiceUtil feignServiceUtil;
 
@@ -59,7 +61,7 @@ public class StockController {
         stock.setProductId(productDto1.getProductID());
         stock.setProductName(productDto1.getProductName());
         stock.setMerchant(merchant);
-        stock.setSkuId(stock.getProductId() + stock.getMerchant().getMerchantId());
+        stock.setSkuId(stock.getMerchant().getMerchantId()+stock.getProductId());
         StockDto stockDto = new StockDto();
         BeanUtils.copyProperties(stock, stockDto);
         return new ResponseEntity<>(stockService.addStock(stockDto), HttpStatus.OK);
@@ -70,6 +72,17 @@ public class StockController {
         Stock stock = stockService.getStock(skuId);
         stock.setPrice(stockUpdateDTO.getPrice());
         stock.setQuantity(stockUpdateDTO.getQuantity());
+        StockDto stockDto = new StockDto();
+        BeanUtils.copyProperties(stock, stockDto);
+        return new ResponseEntity<>(stockService.addStock(stockDto), HttpStatus.OK);
+    }
+
+    @PostMapping("/reduceStock/{skuId}/{quantity}")
+    public ResponseEntity<Stock> reduceStock(@PathVariable("skuId") String skuId, @PathVariable("quantity") String reduceQuantity){
+        Stock stock = stockService.getStock(skuId);
+        if(stock.getQuantity() < (int)Double.parseDouble(reduceQuantity))
+            return null;
+        stock.setQuantity(stock.getQuantity() - ((int)(Double.parseDouble(reduceQuantity))));
         StockDto stockDto = new StockDto();
         BeanUtils.copyProperties(stock, stockDto);
         return new ResponseEntity<>(stockService.addStock(stockDto), HttpStatus.OK);

@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,17 +19,26 @@ import java.util.List;
 public class MerchantController {
     @Autowired
     MerchantService merchantService;
+
     @Autowired
     StockService stockService;
 
     @PostMapping(value = "signUp")
-    public String signUp(@RequestBody MerchantDto merchantDto) {
-        return merchantService.signUp(merchantDto);
+    public ResponseEntity<String> signUp(@RequestBody MerchantDto merchantDto) {
+        return new ResponseEntity<>(merchantService.signUp(merchantDto), HttpStatus.OK);
     }
 
     @PostMapping(value = "signIn")
-    public String signIn(@RequestBody SignInDto signInDto) {
-        return merchantService.signIn(signInDto);
+    public ResponseEntity<String> signIn(@RequestBody SignInDto signInDto) {
+        int response = merchantService.signIn(signInDto);
+        if(response == 1)
+            return new ResponseEntity<>("success!", HttpStatus.OK);
+        else if(response == 2)
+            return new ResponseEntity<>("email does not exist!", HttpStatus.OK);
+        else if(response == 3)
+            return new ResponseEntity<>("incorrect password!", HttpStatus.OK);
+
+        return null;
     }
 
     @GetMapping(value = "displayAll")
@@ -46,7 +54,7 @@ public class MerchantController {
     }
 
     @DeleteMapping(value = "/deleteById/{id}")
-    public String deleteById(@PathVariable("id") String id) {
-        return merchantService.deleteById(id);
+    public ResponseEntity<Boolean> deleteById(@PathVariable("id") String id) {
+         return  new ResponseEntity<>(merchantService.deleteById(id), HttpStatus.OK);
     }
 }

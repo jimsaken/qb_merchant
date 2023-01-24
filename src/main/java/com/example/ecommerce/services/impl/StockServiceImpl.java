@@ -19,8 +19,7 @@ public class StockServiceImpl implements StockService {
 
     @Override
     public List<Stock> findAll() {
-        List<Stock> stockList = stockRepository.findAll();
-        return stockList;
+        return stockRepository.findAll();
     }
 
     @Override
@@ -38,6 +37,4 @@ public class StockServiceImpl implements StockService {
         }
         return null;
     }
-
-
 }
