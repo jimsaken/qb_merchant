@@ -35,8 +35,20 @@ public class StockController {
     FeignServiceUtil feignServiceUtil;
 
     @GetMapping(value = "viewProducts/{merchantId}")
-    public List<StockDto> displayAllByMerchantId(@PathVariable String merchantId) {
+    public List<StockDto> displayAllByMerchantId(@PathVariable("merchantid") String merchantId) {
         List<Stock> stockList = stockService.findByMerchant(merchantId);
+        List<StockDto> stockDtos = new ArrayList<>();
+        for (Stock stock : stockList) {
+            StockDto stockDto = new StockDto();
+            BeanUtils.copyProperties(stock, stockDto);
+            stockDtos.add(stockDto);
+        }
+        return stockDtos;
+    }
+
+    @GetMapping("/viewByProductId/{productId}")
+    public List<StockDto> displayAllByProductId(@PathVariable("productId") String productId){
+        List<Stock> stockList = stockService.findByProduct(productId);
         List<StockDto> stockDtos = new ArrayList<>();
         for (Stock stock : stockList) {
             StockDto stockDto = new StockDto();

@@ -98,8 +98,10 @@ public class MerchantServiceImpl implements MerchantService {
     }
 
     @Override
-    public Merchant findByEmail(String email) {
-        return merchantRepository.findByEmail(email);
+    public MerchantDto findByEmail(String email) {
+        MerchantDto merchantDto = new MerchantDto();
+        BeanUtils.copyProperties(merchantRepository.findByEmail(email), merchantDto);
+        return merchantDto;
     }
 
     @Override

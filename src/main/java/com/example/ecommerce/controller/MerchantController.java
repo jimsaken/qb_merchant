@@ -60,15 +60,13 @@ public class MerchantController {
          return  new ResponseEntity<>(merchantService.deleteById(id), HttpStatus.OK);
     }
 
-    @PostMapping("/getByEmail/")
-    public ResponseEntity<MerchantDto> getByEmail(@RequestBody MerchantEmailDto merchantEmailDto){
-        MerchantDto merchantDto = new MerchantDto();
-        BeanUtils.copyProperties(merchantService.findByEmail(merchantEmailDto.getEmail()), merchantDto);
-        return new ResponseEntity<>(merchantDto, HttpStatus.OK);
+    @GetMapping("/getByEmail/{email}")
+    public ResponseEntity<MerchantDto> getByEmail(@PathVariable("email") String email){
+        return new ResponseEntity<>(merchantService.findByEmail(email), HttpStatus.OK);
     }
 
     @GetMapping("/getMerchant/{email}")
-    public Merchant getMerchant(@PathVariable("email") String email){
+    public MerchantDto getMerchant(@PathVariable("email") String email){
         return merchantService.findByEmail(email);
     }
 }

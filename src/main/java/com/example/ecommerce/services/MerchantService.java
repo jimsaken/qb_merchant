@@ -13,6 +13,6 @@ public interface MerchantService {
     Integer signIn(SignInDto signInDto);
     Boolean deleteById(String id);
     Merchant findById(String merchantId);
-    Merchant findByEmail(String email);
+    MerchantDto findByEmail(String email);
     Merchant findByMerchantId(String merchantId);
 }
