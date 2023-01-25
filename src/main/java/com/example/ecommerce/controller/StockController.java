@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+@CrossOrigin(origins = "http://localhost:8082/")
 @RequestMapping("/stock")
 @RestController
 public class StockController {
@@ -62,6 +63,7 @@ public class StockController {
         stock.setProductName(productDto1.getProductName());
         stock.setMerchant(merchant);
         stock.setSkuId(stock.getMerchant().getMerchantId()+stock.getProductId());
+        stock.setImage(productDto1.getImageURL());
         StockDto stockDto = new StockDto();
         BeanUtils.copyProperties(stock, stockDto);
         return new ResponseEntity<>(stockService.addStock(stockDto), HttpStatus.OK);

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:8082/")
 @RequestMapping("/merchant")
 @RestController
 public class MerchantController {
@@ -64,5 +65,10 @@ public class MerchantController {
         MerchantDto merchantDto = new MerchantDto();
         BeanUtils.copyProperties(merchantService.findByEmail(merchantEmailDto.getEmail()), merchantDto);
         return new ResponseEntity<>(merchantDto, HttpStatus.OK);
+    }
+
+    @GetMapping("/getMerchant/{email}")
+    public Merchant getMerchant(@PathVariable("email") String email){
+        return merchantService.findByEmail(email);
     }
 }
