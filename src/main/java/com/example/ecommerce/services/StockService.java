@@ -9,4 +9,5 @@ public interface StockService {
     List<Stock> findAll();
     Stock addStock(StockDto stockDto);
     Stock getStock(String skuID);
+    List<Stock> findByMerchant(String merchantId);
 }

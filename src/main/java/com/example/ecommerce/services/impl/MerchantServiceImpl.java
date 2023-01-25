@@ -5,6 +5,7 @@ import com.example.ecommerce.dto.SignInDto;
 import com.example.ecommerce.entity.Merchant;
 import com.example.ecommerce.repository.MerchantRepository;
 import com.example.ecommerce.services.MerchantService;
+import io.swagger.models.auth.In;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,13 +25,13 @@ public class MerchantServiceImpl implements MerchantService {
     MerchantRepository merchantRepository;
 
     @Override
-    public String signUp(MerchantDto merchantDto) {
+    public Integer signUp(MerchantDto merchantDto) {
         if (Objects.nonNull(merchantRepository.findByEmail(merchantDto.getEmail()))) {
-            return "username already exists";
+            return 2;
         }
 
         if (!merchantDto.getPassword().equals(merchantDto.getConfirmPassword()))
-            return "password does not match";
+            return 3;
 
         String encryptedPassword = merchantDto.getPassword();
         try {
@@ -43,9 +44,8 @@ public class MerchantServiceImpl implements MerchantService {
         BeanUtils.copyProperties(merchantDto, merchant);
         merchant.setMerchantId(merchant.getName().toUpperCase().substring(0, 3) + (new SimpleDateFormat("yyyy-MM").format(new Date())));
         merchant.setPassword(encryptedPassword);
-
         merchantRepository.save(merchant);
-        return "user created successfully";
+        return 1;
     }
 
     public String hashPassword(String password) throws NoSuchAlgorithmException {

@@ -2,6 +2,7 @@ package com.example.ecommerce.controller;
 
 import com.example.ecommerce.dto.DisplayMerchantDto;
 import com.example.ecommerce.dto.MerchantDto;
+import com.example.ecommerce.dto.MerchantEmailDto;
 import com.example.ecommerce.dto.SignInDto;
 import com.example.ecommerce.entity.Merchant;
 import com.example.ecommerce.services.MerchantService;
@@ -24,19 +25,19 @@ public class MerchantController {
     StockService stockService;
 
     @PostMapping(value = "signUp")
-    public ResponseEntity<String> signUp(@RequestBody MerchantDto merchantDto) {
+    public ResponseEntity<Integer> signUp(@RequestBody MerchantDto merchantDto) {
         return new ResponseEntity<>(merchantService.signUp(merchantDto), HttpStatus.OK);
     }
 
     @PostMapping(value = "signIn")
-    public ResponseEntity<String> signIn(@RequestBody SignInDto signInDto) {
+    public ResponseEntity<Integer> signIn(@RequestBody SignInDto signInDto) {
         int response = merchantService.signIn(signInDto);
         if(response == 1)
-            return new ResponseEntity<>("success!", HttpStatus.OK);
+            return new ResponseEntity<>(1, HttpStatus.OK); //Success
         else if(response == 2)
-            return new ResponseEntity<>("email does not exist!", HttpStatus.OK);
+            return new ResponseEntity<>(2, HttpStatus.OK); //Incorrect Email
         else if(response == 3)
-            return new ResponseEntity<>("incorrect password!", HttpStatus.OK);
+            return new ResponseEntity<>(3, HttpStatus.OK); //Incorrect Password
 
         return null;
     }
@@ -56,5 +57,12 @@ public class MerchantController {
     @DeleteMapping(value = "/deleteById/{id}")
     public ResponseEntity<Boolean> deleteById(@PathVariable("id") String id) {
          return  new ResponseEntity<>(merchantService.deleteById(id), HttpStatus.OK);
+    }
+
+    @PostMapping("/getByEmail/")
+    public ResponseEntity<MerchantDto> getByEmail(@RequestBody MerchantEmailDto merchantEmailDto){
+        MerchantDto merchantDto = new MerchantDto();
+        BeanUtils.copyProperties(merchantService.findByEmail(merchantEmailDto.getEmail()), merchantDto);
+        return new ResponseEntity<>(merchantDto, HttpStatus.OK);
     }
 }

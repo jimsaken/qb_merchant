@@ -37,4 +37,9 @@ public class StockServiceImpl implements StockService {
         }
         return null;
     }
+
+    @Override
+    public List<Stock> findByMerchant(String merchantId) {
+        return stockRepository.findAllByMerchant_MerchantId(merchantId);
+    }
 }

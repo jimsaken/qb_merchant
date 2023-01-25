@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface MerchantService {
 
-    String signUp(MerchantDto merchantDto);
+    Integer signUp(MerchantDto merchantDto);
     List<Merchant> findAll();
     Integer signIn(SignInDto signInDto);
     Boolean deleteById(String id);

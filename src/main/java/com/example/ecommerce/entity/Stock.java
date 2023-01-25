@@ -16,6 +16,7 @@ public class Stock {
 
     private String productId;
     private String productName;
+    private String productURL;
     private int quantity;
     private double price;
     @Id

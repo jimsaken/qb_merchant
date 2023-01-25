@@ -33,9 +33,9 @@ public class StockController {
     @Autowired
     FeignServiceUtil feignServiceUtil;
 
-    @GetMapping(value = "viewProducts")
-    public List<StockDto> displayAll() {
-        List<Stock> stockList = stockService.findAll();
+    @GetMapping(value = "viewProducts/{merchantId}")
+    public List<StockDto> displayAllByMerchantId(@PathVariable String merchantId) {
+        List<Stock> stockList = stockService.findByMerchant(merchantId);
         List<StockDto> stockDtos = new ArrayList<>();
         for (Stock stock : stockList) {
             StockDto stockDto = new StockDto();

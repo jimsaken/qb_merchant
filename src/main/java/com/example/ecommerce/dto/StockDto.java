@@ -11,6 +11,7 @@ import java.util.Date;
 public class StockDto {
     private String productId;
     private String productName;
+    private String productURL;
     private int quantity;
     private double price;
     private String skuId;
